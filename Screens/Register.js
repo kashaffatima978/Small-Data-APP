@@ -7,68 +7,95 @@ export default Register = function ({navigation}) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [conPass, setConPass] = useState('');
+  const [err, setErr]=useState("");
   
   const Register = async ()=>{
-    if(password === conPass){
-      try{
-      const obj = {
-        "name": name,
-        "password": password,
-        "email": email,
+    if((name.length>0) && (password.length>0) && (email.length>0) && (conPass.length>0)){
+      if(password == conPass){
+        setErr("");
+        obj = {
+          name: name,
+          pass: password,
+          email: email,
+        }
+        try {
+          const jsonValue = JSON.stringify(obj)
+          await AsyncStorage.setItem('@email', jsonValue)
+          
+        } catch (e) {
+          console.log(e);
+        }
+        navigation.navigate("Login");
       }
-      await AsyncStorage.setItem('data', JSON.stringify(obj));
-      alert('registered');
-      navigation.navigate('Login');
+      else{
+        setErr("Both password doesnot match");
       }
-      catch(err){
-        alert(err)
-      }
-      
     }
     else{
-      alert('CHECK PASSWORDS.')
+      setErr("Incomplete or wrong information")
     }
-    
-
     
   }
   
-  
   return (
-    <SafeAreaView style={{flex:1}}>
-    <View styles ={styles.head}><Text style={{ fontSize:40,
-    fontStyle: 'bold', textAlign: 'center'}}>Register</Text></View>
+    <SafeAreaView style={styles.container}>
+    <View styles ={styles.head}><Text style={styles.headText}>Register</Text></View>
       
       <TextInput value={name} onChangeText={setName} style={styles.input} placeholder='UserName'/>
       <TextInput value={email} onChangeText={setEmail} style={styles.input} placeholder='Email'/>
       <TextInput value={password} onChangeText={setPassword} style={styles.input} placeholder='Password'/>
       <TextInput value={conPass} onChangeText={setConPass} style={styles.input} placeholder='Confirm password'/>
+      <Text style={styles.err}>{err}</Text>
       <TouchableOpacity style={styles.button} onPress={Register}>
-        <Text>Register</Text>
+        <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
-
+      
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        justifyContent: 'space-evenly',
+    },
   head:{
-   
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 50,
-    marginBottom: 50
+    alignSelf: 'center'
+
+  },
+  headText:{
+    fontSize: 35,
+    textAlign: 'center',
+    color: "#7261A3",
+    fontWeight: 'bold'
   },
   input:{
-    margin: 5,
+    borderColor:"#7261A3",
     borderWidth: 1,
-    padding: 5
+    padding: 15,
+    borderRadius: 10, 
+    marginLeft: 10,
+    marginRight: 10
   },
   button:{
-    width: 100,
-    backgroundColor: 'lightblue',
+    width: 130,
+    backgroundColor: '#7261A3',
     alignSelf: 'center',
     padding: 15,
     textAlign: 'center',
-    borderRadius: 15,
+    borderRadius: 20,
+    marginTop: -40
+  },
+  buttonText:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center'
+  },
+  err:{
+    color: 'red',
+    marginLeft: 20,
+    textAlign: 'left',
+    fontSize: 15,
+    marginTop: -50
   }
 });

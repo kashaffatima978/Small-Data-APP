@@ -4,54 +4,95 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default Login = function ({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [err, setErr]=useState("");
 
   const loginData= async()=>{
-    try{
-      data = await AsyncStorage.getItem('data');
-      value = JSON.parse(data);
-      if(email === data.email && password==data.password){
-        navigation.navigate('Home');
+    if(email!="" && password!=""){
+      setErr("");
+      try{
+        const jsonValue = await AsyncStorage.getItem('@email');
+        if(jsonValue!=null){
+          setErr('')
+          setErr('')
+          const obj = JSON.parse(jsonValue);
+          if(obj.pass == password && obj.email == email){
+            navigation.navigate('view');
+          }
+          else{
+            setErr('Check Email and Password again')
+          }
+        }
+        else{
+          setErr('Check Email and Password again')
+        }
+
       }
-      else{
-        alert('Wrong input');
+      catch(e){
+        console.log(e);
       }
     }
-    catch(err){
-      alert(err);
+    else{
+      setErr("Email or password incomplete or wrong.")
     }
   }
   return (
-    <SafeAreaView style={{flex:1}}>
-    <View styles ={styles.head}><Text style={{ fontSize:40,
-    fontStyle: 'bold', textAlign: 'center'}}>Login</Text></View>
+    <SafeAreaView style={styles.container}>
+    <View styles ={styles.head}><Text style={styles.headText}>Login</Text></View>
       
       <TextInput value={email} onChangeText={setEmail} style={styles.input} placeholder='Email'/>
       <TextInput value={password} onChangeText={setPassword} style={styles.input} placeholder='Password'/>
+      <Text style={styles.err}>{err}</Text>
       <TouchableOpacity style={styles.button} onPress={loginData}>
-        <Text>login</Text>
+        <Text style={styles.buttonText}>login</Text>
       </TouchableOpacity>
 
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
-  head:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 50,
-    marginBottom: 50
-  },
-  input:{
-    margin: 5,
-    borderWidth: 1,
-    padding: 5
-  },
-  button:{
-    width: 100,
-    backgroundColor: 'lightblue',
-    alignSelf: 'center',
-    padding: 15,
-    textAlign: 'center',
-    borderRadius: 15,
-  }
+  container:{
+    flex:1,
+    justifyContent: 'space-evenly',
+},
+head:{
+alignSelf: 'center'
+
+},
+headText:{
+fontSize: 35,
+textAlign: 'center',
+color: "#7261A3",
+fontWeight: 'bold'
+},
+input:{
+borderColor:"#7261A3",
+borderWidth: 1,
+padding: 15,
+borderRadius: 10, 
+marginLeft: 10,
+marginRight: 10
+},
+button:{
+width: 130,
+backgroundColor: '#7261A3',
+alignSelf: 'center',
+padding: 15,
+textAlign: 'center',
+borderRadius: 20,
+marginTop: -40
+},
+buttonText:{
+fontSize: 18,
+fontWeight: 'bold',
+color: 'white',
+textAlign: 'center'
+},
+err:{
+color: 'red',
+marginLeft: 20,
+textAlign: 'left',
+fontSize: 15,
+marginTop: -50
+}
+
 });
