@@ -26,7 +26,7 @@ import Register from './Screens/Register';
 import Add from './Screens/Add';
 import ViewScreen from './Screens/ViewScreen';
 import Update from './Screens/Update';
-import Delete from './Screens/Delete';
+
 import Splash from './Screens/Splash';
 
 const Stack = createNativeStackNavigator();
@@ -54,7 +54,6 @@ const App: () => Node = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="add" component={Add} />
         <Stack.Screen name="view" component={ViewScreen} />
-        <Stack.Screen name="delete" component={Delete} />
         <Stack.Screen name="update" component={Update} />
       </Stack.Navigator>
     </NavigationContainer>
