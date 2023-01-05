@@ -7,21 +7,32 @@ export default ViewScreen = function ({navigation}) {
   const [loading, setLoading] = useState(true);
  useEffect(()=>{
   if(count==0){
+    try{
     fetch('https://jsonplaceholder.typicode.com/comments')
     .then((response) => response.json())
     .then((json) => {
       setData(json);
       setLoading(false);
-    });
+      // console.log(json)
+    })
+  }
+  catch(err){
+    console.log(err);
+  }
+
     setCount(1);
   }
  },[count, data])
+
+
+  const nextPage =(id)=>{
+    navigation.navigate('update',{id: id})
+  }
   
   
   const show=({item})=>{
-
     return(
-      <View style={styles.main}>
+      <TouchableOpacity style={styles.main} onPress={()=>{nextPage(item.id)}}>
         <View style={styles.viewD}>
           <View style={styles.con1}>
             <Text style={{fontSize: 30}}>{item.id}</Text>
@@ -32,22 +43,29 @@ export default ViewScreen = function ({navigation}) {
             <Text style={styles.comment}><Text style={{fontWeight:'bold'}}>Comment:</Text> {item.body}</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
+        
     )
   }
   return (
 
     <SafeAreaView style={styles.container}>
       <View styles ={styles.head}><Text style={styles.headText}>Comments </Text></View>
-
-      <ScrollView>
         {!loading?
         <FlatList 
           style={styles.scroll}
           data={data} 
           renderItem={show} 
           keyExtractor={item => item.id}/>:null}
-      </ScrollView>
+
+
+      <TouchableOpacity style={styles.addButton}
+          onPress={()=>{
+              navigation.navigate("add");
+          }}>
+              <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
+    
       
   </SafeAreaView>
 
@@ -119,5 +137,21 @@ con1:{
 },
 con2:{
   flex: 0.8
+},
+addButton:{
+  position:"absolute",  
+  bottom:"5%",
+  right:"4%",
+  borderRadius:100,
+  backgroundColor:"purple",
+  width:"20%",
+  height:"10%",
+  justifyContent:"center",
+  alignItems:"center",
+},
+addButtonText:{
+  fontSize:40,
+  fontWeight:"bold",
+  color:"#212529"
 }
 });

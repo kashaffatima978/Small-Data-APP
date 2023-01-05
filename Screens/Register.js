@@ -21,7 +21,7 @@ export default Register = function ({navigation}) {
         try {
           const jsonValue = JSON.stringify(obj)
           await AsyncStorage.setItem('@email', jsonValue)
-          
+                      
         } catch (e) {
           console.log(e);
         }
