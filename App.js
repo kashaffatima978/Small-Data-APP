@@ -48,7 +48,7 @@ const App: () => Node = () => {
 
   return (
     <NavigationContainer style={backgroundStyle} >
-      <Stack.Navigator initialRouteName='view' screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName='splash' screenOptions={{headerShown: false}}>
         {showSplash?<Stack.Screen name="splash" component={Splash} />:null}
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Login" component={Login} />

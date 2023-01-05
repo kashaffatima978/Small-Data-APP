@@ -43,7 +43,9 @@ export default Update = function ({navigation, route}) {
   },
 })
   .then((response) => {
-    alert(response.status)
+    if(response.status==200){
+      alert('Object updated!!');
+    }
   })
  }
   return (
